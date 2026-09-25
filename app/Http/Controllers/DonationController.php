@@ -37,12 +37,11 @@ class DonationController extends Controller
             'image'=>'nullable|image|max:2048',
 
         ]);
+if ($request->hasFile('image')) {
+    $uploadedFile = $request->file('image')->storeOnCloudinary('donations');
 
-        if($request->hasFile('image')) {
-            $validated['image']=
-            $request->file('image')->store('donations','public');
-        }
-
+    $validated['image'] = $uploadedFile->getSecurePath();
+}
         Donation::create($validated);
 
         return redirect()
