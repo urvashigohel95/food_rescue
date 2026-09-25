@@ -32,6 +32,10 @@ COPY . .
 # Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+RUN apt-get update && apt-get install -y nodejs npm
+RUN npm install
+RUN npm run build
+
 # Laravel needs public/ as document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
