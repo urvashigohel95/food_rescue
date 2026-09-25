@@ -26,25 +26,21 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy project
 COPY . .
 
-# Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN apt-get update && apt-get install -y nodejs npm
-RUN npm install
-RUN npm run build
 
-# Laravel needs public/ as document root
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN npm install
+
+RUN npm run build
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf \
     /etc/apache2/apache2.conf \
     /etc/apache2/conf-available/*.conf
 
-# Storage permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80
