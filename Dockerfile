@@ -1,6 +1,5 @@
 FROM php:8.2-apache
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -9,6 +8,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libpq-dev \
+    nodejs \
+    npm \
     && docker-php-ext-install \
     pdo \
     pdo_mysql \
@@ -21,7 +22,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     && a2enmod rewrite
 
-# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
@@ -30,17 +30,13 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-RUN apt-get update && apt-get install -y nodejs npm
-
 RUN npm install
 
 RUN npm run build
 
-RUN sed -ri -e "s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g" \
-    /etc/apache2/sites-available/*.conf \
-    /etc/apache2/apache2.conf \
-    /etc/apache2/conf-available/*.conf
-    
+RUN sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/public#' \
+    /etc/apache2/sites-available/000-default.conf
+
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80
