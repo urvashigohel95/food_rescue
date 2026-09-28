@@ -37,18 +37,31 @@ class DonationController extends Controller
             'image'=>'nullable|image|max:2048',
 
         ]);
-if ($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
+
     try {
+
         $uploadedFile = $request->file('image')
             ->storeOnCloudinary('donations');
 
+        if (!$uploadedFile) {
+            return back()->with('error', 'Cloudinary upload returned no file.');
+        }
+
         $validated['image'] = $uploadedFile->getSecurePath();
 
-    } catch (\Exception $e) {
-        return back()->with('error', $e->getMessage());
+    } catch (\Throwable $e) {
+
+        \Log::error('CLOUDINARY UPLOAD ERROR', [
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+
+        return back()->with('error', 'Image upload failed. Check Laravel log.');
     }
 }
-        Donation::create($validated);
+       Donation::create($validated);
 
         return redirect()
         ->route('donations.create')
