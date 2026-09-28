@@ -24,7 +24,7 @@ class DonationController extends Controller
         return view('donations.create');
     }
 
-  public function store(Request $request)
+public function store(Request $request)
 {
     $validated = $request->validate([
         'food_name' => 'required|string|max:255',
@@ -63,12 +63,6 @@ class DonationController extends Controller
         ->route('donations.index')
         ->with('success', 'Food donation added successfully');
 }
-       Donation::create($validated);
-
-        return redirect()
-        ->route('donations.create')
-        ->with('success', 'Food donation added successfully');
-    }
 
 
     public function requestFood(Request $request, Donation $donation)
