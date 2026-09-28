@@ -38,9 +38,15 @@ class DonationController extends Controller
 
         ]);
 if ($request->hasFile('image')) {
-    $uploadedFile = $request->file('image')->storeOnCloudinary('donations');
+    try {
+        $uploadedFile = $request->file('image')
+            ->storeOnCloudinary('donations');
 
-    $validated['image'] = $uploadedFile->getSecurePath();
+        $validated['image'] = $uploadedFile->getSecurePath();
+
+    } catch (\Exception $e) {
+        return back()->with('error', $e->getMessage());
+    }
 }
         Donation::create($validated);
 
