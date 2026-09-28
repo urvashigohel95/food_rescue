@@ -38,23 +38,10 @@ public function store(Request $request)
     ]);
 
     if ($request->hasFile('image')) {
-        try {
-            $uploadedFile = $request->file('image')
-                ->storeOnCloudinary('donations');
+        $uploadedFile = $request->file('image')
+            ->storeOnCloudinary('donations');
 
-            if (!$uploadedFile) {
-                dd('Cloudinary returned no uploaded file.');
-            }
-
-            $validated['image'] = $uploadedFile->getSecurePath();
-
-        } catch (\Throwable $e) {
-            dd([
-                'Cloudinary Error' => $e->getMessage(),
-                'File' => $e->getFile(),
-                'Line' => $e->getLine(),
-            ]);
-        }
+        $validated['image'] = $uploadedFile->getSecurePath();
     }
 
     Donation::create($validated);
@@ -63,7 +50,6 @@ public function store(Request $request)
         ->route('donations.index')
         ->with('success', 'Food donation added successfully');
 }
-
 
     public function requestFood(Request $request, Donation $donation)
     {
