@@ -24,42 +24,44 @@ class DonationController extends Controller
         return view('donations.create');
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'food_name'=> 'required|string|max:255',
-            'food_type'=>'required|string|max:100',
-            'quantity'=>'required|integer|min:1',
-            'quantity_unit'=>'required|string|max:255',
-            'description'=>'required|string',
-            'pickup_location'=>'required|string|max:255',
-            'available_until'=>'required|date',
-            'image'=>'nullable|image|max:2048',
+  public function store(Request $request)
+{
+    $validated = $request->validate([
+        'food_name' => 'required|string|max:255',
+        'food_type' => 'required|string|max:100',
+        'quantity' => 'required|integer|min:1',
+        'quantity_unit' => 'required|string|max:255',
+        'description' => 'required|string',
+        'pickup_location' => 'required|string|max:255',
+        'available_until' => 'required|date',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-        ]);
-        if ($request->hasFile('image')) {
+    if ($request->hasFile('image')) {
+        try {
+            $uploadedFile = $request->file('image')
+                ->storeOnCloudinary('donations');
 
-    try {
+            if (!$uploadedFile) {
+                dd('Cloudinary returned no uploaded file.');
+            }
 
-        $uploadedFile = $request->file('image')
-            ->storeOnCloudinary('donations');
+            $validated['image'] = $uploadedFile->getSecurePath();
 
-        if (!$uploadedFile) {
-            return back()->with('error', 'Cloudinary upload returned no file.');
+        } catch (\Throwable $e) {
+            dd([
+                'Cloudinary Error' => $e->getMessage(),
+                'File' => $e->getFile(),
+                'Line' => $e->getLine(),
+            ]);
         }
-
-        $validated['image'] = $uploadedFile->getSecurePath();
-
-    } catch (\Throwable $e) {
-
-        \Log::error('CLOUDINARY UPLOAD ERROR', [
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-        ]);
-
-        return back()->with('error', 'Image upload failed. Check Laravel log.');
     }
+
+    Donation::create($validated);
+
+    return redirect()
+        ->route('donations.index')
+        ->with('success', 'Food donation added successfully');
 }
        Donation::create($validated);
 
