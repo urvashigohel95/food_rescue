@@ -10,14 +10,14 @@ use Illuminate\Http\Request;
 class DonationController extends Controller
 {
     //
-    public function index()
-    {
-        $donations = Donation::where('available_until', '>', now())
-        ->latest()
-        ->get();
+  
+       public function index()
+{
+    $donations = Donation::latest()->get();
 
-        return view('donations.index', compact('donations'));
-    }
+    return view('donations.index', compact('donations'));
+}
+    
 
     public function create()
     {
