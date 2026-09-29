@@ -44,7 +44,11 @@ return [
             'throw' => false,
         ],
 
+<<<<<<< HEAD
     'cloudinary' => [
+=======
+        'cloudinary' => [
+>>>>>>> 1524f65 (Fix Cloudinary image upload error handling)
     'driver' => 'cloudinary',
     'url' => env('CLOUDINARY_URL'),
     'throw' => false,

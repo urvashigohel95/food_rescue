@@ -29,4 +29,8 @@ return [
         'cloud_url' => env('CLOUDINARY_URL'),
     ],
 
+<<<<<<< HEAD
 ];
+=======
+];
+>>>>>>> 1524f65 (Fix Cloudinary image upload error handling)
