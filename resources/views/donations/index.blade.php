@@ -345,20 +345,10 @@
 
                     {{-- FOOD IMAGE --}}
 
-                    @if($donation->image)
+                   @if($donation->image)
+    <img src="{{ $donation->image }}" alt="Food Image">
+@endif
 
-                        <img
-                            src="{{ asset('storage/' . $donation->image) }}"
-                            class="food-image"
-                            alt="{{ $donation->food_name }}">
-
-                    @else
-
-                        <div class="no-image">
-                            No image available
-                        </div>
-
-                    @endif
 
 
                     <div class="food-content">

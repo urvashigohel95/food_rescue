@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Donation;
 use App\Models\FoodRequest;
 use Illuminate\Http\Request;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class DonationController extends Controller
 {
@@ -39,36 +40,27 @@ class DonationController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        if ($request->hasFile('image')) {
+       if ($request->hasFile('image')) {
+    try {
+        $uploadedFile = Cloudinary::upload(
+            $request->file('image')->getRealPath(),
+            [
+                'folder' => 'donations',
+            ]
+        );
 
-     
+        $validated['image'] = $uploadedFile->getSecurePath();
 
-            try {
+    } catch (\Throwable $e) {
+        \Log::error('CLOUDINARY UPLOAD ERROR', [
+            'message' => $e->getMessage(),
+        ]);
 
-                $uploadedFile = $request->file('image')
-                    ->storeOnCloudinary('donations');
-
-                if (!$uploadedFile) {
-                    return back()
-                        ->withInput()
-                        ->with('error', 'Cloudinary did not return an uploaded file.');
-                }
-
-                $validated['image'] = $uploadedFile->getSecurePath();
-
-            } catch (\Throwable $e) {
-
-                \Log::error('CLOUDINARY UPLOAD ERROR', [
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                ]);
-
-                return back()
-                    ->withInput()
-                    ->with('error', 'Image upload failed: ' . $e->getMessage());
-            }
-        }
+        return back()
+            ->withInput()
+            ->with('error', 'Image upload failed: ' . $e->getMessage());
+    }
+}
 
         /*
         |--------------------------------------------------------------------------
