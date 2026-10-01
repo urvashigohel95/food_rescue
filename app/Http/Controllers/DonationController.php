@@ -41,6 +41,12 @@ class DonationController extends Controller
 
         if ($request->hasFile('image')) {
 
+        dd([
+    'cloudinary_url_exists' => env('CLOUDINARY_URL') !== null,
+    'cloudinary_url_empty' => empty(env('CLOUDINARY_URL')),
+    'cloudinary_config' => config('filesystems.disks.cloudinary.url'),
+]);
+
             try {
 
                 $uploadedFile = $request->file('image')
