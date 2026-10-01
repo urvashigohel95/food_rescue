@@ -39,6 +39,7 @@ return [
     'url' => env('CLOUDINARY_URL'),
     'secure' => true,
     'throw' => false,
+    'prefix'=> env('CLOUDINARY_PREFIX')
 ],
 
     ],
