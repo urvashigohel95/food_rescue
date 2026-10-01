@@ -33,15 +33,9 @@ return [
         ],
 'cloudinary' => [
     'driver' => 'cloudinary',
-    'key' => env('CLOUDINARY_KEY'),
-    'secret' => env('CLOUDINARY_SECRET'),
-    'cloud' => env('CLOUDINARY_CLOUD_NAME'),
     'url' => env('CLOUDINARY_URL'),
-    'secure' => true,
     'throw' => false,
-    'prefix'=> env('CLOUDINARY_PREFIX')
 ],
-
     ],
 
     'links' => [
