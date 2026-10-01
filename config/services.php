@@ -2,12 +2,6 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Third Party Services
-    |--------------------------------------------------------------------------
-    */
-
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
@@ -29,8 +23,4 @@ return [
         'cloud_url' => env('CLOUDINARY_URL'),
     ],
 
-<<<<<<< HEAD
 ];
-=======
-];
->>>>>>> 1524f65 (Fix Cloudinary image upload error handling)

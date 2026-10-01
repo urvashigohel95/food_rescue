@@ -8,56 +8,18 @@ use Illuminate\Http\Request;
 
 class DonationController extends Controller
 {
-<<<<<<< HEAD
-    //
-  
-       public function index()
-{
-    $donations = Donation::latest()->get();
-=======
     public function index()
     {
         $donations = Donation::latest()->get();
->>>>>>> 1524f65 (Fix Cloudinary image upload error handling)
 
-    return view('donations.index', compact('donations'));
-}
-    
+        return view('donations.index', compact('donations'));
+    }
 
     public function create()
     {
         return view('donations.create');
     }
 
-<<<<<<< HEAD
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'food_name' => 'required|string|max:255',
-        'food_type' => 'required|string|max:100',
-        'quantity' => 'required|integer|min:1',
-        'quantity_unit' => 'required|string|max:255',
-        'description' => 'required|string',
-        'pickup_location' => 'required|string|max:255',
-        'available_until' => 'required|date',
-        'image' => 'nullable|image|max:2048',
-    ]);
-
-    if ($request->hasFile('image')) {
-        $uploadedFile = $request->file('image')
-            ->storeOnCloudinary('donations');
-
-        $validated['image'] = $uploadedFile->getSecurePath();
-    }
-
-    Donation::create($validated);
-
-    return redirect()
-        ->route('donations.index')
-        ->with('success', 'Food donation added successfully');
-}
-
-=======
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -134,7 +96,6 @@ public function store(Request $request)
             ->with('success', 'Food donation added successfully!');
     }
 
->>>>>>> 1524f65 (Fix Cloudinary image upload error handling)
     public function requestFood(Request $request, Donation $donation)
     {
         $validated = $request->validate([
