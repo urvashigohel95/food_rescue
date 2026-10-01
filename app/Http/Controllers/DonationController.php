@@ -41,10 +41,7 @@ class DonationController extends Controller
 
         if ($request->hasFile('image')) {
 
-      dd([
-    'cloudinary_url_exists' => !empty(config('cloudinary.cloud_url')),
-    'cloudinary_url' => config('cloudinary.cloud_url'),
-]);
+     
 
             try {
 
