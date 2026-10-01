@@ -31,7 +31,6 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN npm install
-
 RUN npm run build
 
 RUN sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/public#' \
@@ -41,4 +40,4 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php artisan migrate --force && apache2-foreground"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan cache:clear && php artisan migrate --force && apache2-foreground"]
