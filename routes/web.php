@@ -61,3 +61,13 @@ Route::middleware(['auth','admin'])->group(function(){
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::get('/cloudinary-test', function () {
+    return response()->json([
+        'cloudinary_url_exists' => !empty(env('CLOUDINARY_URL')),
+        'cloudinary_key_exists' => !empty(env('CLOUDINARY_KEY')),
+        'cloudinary_secret_exists' => !empty(env('CLOUDINARY_SECRET')),
+        'cloudinary_cloud_exists' => !empty(env('CLOUDINARY_CLOUD_NAME')),
+    ]);
+});
