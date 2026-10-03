@@ -130,8 +130,10 @@
                 <a href="{{ route('donations.create')}}">
                     +Donate Food</a>
 
+               @if(auth()->user()->is_admin)
                 <a href="{{ route('food_requests.index')}}">
                     Food Requests</a>
+                    @endif
 </div>
 </header>
 

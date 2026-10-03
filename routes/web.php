@@ -40,14 +40,16 @@ Route::post('/donations', [DonationController::class, 'store'])
 ->name('donations.store');
 });
 
+Route::post('/donations/{donation}/request', [DonationController::class, 'requestFood'])
+->name('donations.request');
+
 
 Route::get('/donations', [DonationController::class, 'index'])
 ->name('donations.index');
 
 
 Route::middleware(['auth','admin'])->group(function(){
-    Route::post('/donations/{donation}/request', [DonationController::class,'requestFood'])
-    ->name('donations.request');
+
 
     Route::get('/food-requests',[FoodRequestController::class, 'index'])
 ->name('food_requests.index');

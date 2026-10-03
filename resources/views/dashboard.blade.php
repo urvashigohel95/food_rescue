@@ -120,7 +120,10 @@
         <a href="{{ route('dashboard') }}">Dashboard</a>
         <a href="{{ route('donations.index') }}">Available Food</a>
         <a href="{{ route('donations.create') }}">+ Donate Food</a>
+
+        @if(auth()->user()->is_admin)
         <a href="{{ route('food_requests.index') }}">Food Requests</a>
+        @endif   
 
         <form method="POST" action="{{ route('logout') }}" style="display:inline;">
             @csrf

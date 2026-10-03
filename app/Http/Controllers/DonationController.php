@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Models\Donation;
@@ -23,6 +24,8 @@ class DonationController extends Controller
 
     public function store(Request $request)
     {
+        set_time_limit(120);
+        
         $validated = $request->validate([
             'food_name' => 'required|string|max:255',
             'food_type' => 'required|string|max:100',
@@ -34,46 +37,36 @@ class DonationController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Upload Image to Cloudinary
-        |--------------------------------------------------------------------------
-        */
+        // Upload image to Cloudinary
+        if ($request->hasFile('image')) {
+            try {
+                $uploadedFile = Cloudinary::upload(
+                    $request->file('image')->getRealPath(),
+                    [
+                        'folder' => 'donations',
+                    ]
+                );
 
-       if ($request->hasFile('image')) {
-    try {
-        $uploadedFile = Cloudinary::upload(
-            $request->file('image')->getRealPath(),
-            [
-                'folder' => 'donations',
-            ]
-        );
+                $validated['image'] = $uploadedFile->getSecurePath();
 
-        $validated['image'] = $uploadedFile->getSecurePath();
+            } catch (\Throwable $e) {
+                \Log::error('CLOUDINARY UPLOAD ERROR', [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ]);
 
-    } catch (\Throwable $e) {
-        \Log::error('CLOUDINARY UPLOAD ERROR', [
-            'message' => $e->getMessage(),
-        ]);
+                return back()
+                    ->withInput()
+                    ->with('error', 'Image upload failed: ' . $e->getMessage());
+            }
+        }
 
-        return back()
-            ->withInput()
-            ->with('error', 'Image upload failed: ' . $e->getMessage());
-    }
-}
-
-        /*
-        |--------------------------------------------------------------------------
-        | Save Donation
-        |--------------------------------------------------------------------------
-        */
-
+        // Save donation
         try {
-
             Donation::create($validated);
 
         } catch (\Throwable $e) {
-
             \Log::error('DONATION CREATE ERROR', [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
@@ -102,7 +95,6 @@ class DonationController extends Controller
         $validated['donation_id'] = $donation->id;
 
         try {
-
             FoodRequest::create($validated);
 
             $donation->update([
@@ -110,7 +102,6 @@ class DonationController extends Controller
             ]);
 
         } catch (\Throwable $e) {
-
             \Log::error('FOOD REQUEST ERROR', [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
@@ -127,3 +118,5 @@ class DonationController extends Controller
             ->with('success', 'Food request submitted successfully!');
     }
 }
+
+

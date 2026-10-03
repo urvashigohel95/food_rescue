@@ -269,10 +269,12 @@
         + Donate Food
     </a>
 
+   @if(auth()->user()->is_admin)
     <a href="{{route('food_requests.index')}}">
         Food Requests</a>
+   @endif
 
-    <form method="POST" actions="{{route('logout')}}" style="display:inline;">
+    <form method="POST" action="{{route('logout')}}" style="display:inline;">
         @csrf
 
         <button type="submit">Logout</button>
