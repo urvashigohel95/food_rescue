@@ -1,18 +1,15 @@
+
 FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
+    libpq-dev \
     libzip-dev \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    libpq-dev \
-    nodejs \
-    npm \
     && docker-php-ext-install \
-    pdo \
-    pdo_mysql \
     pdo_pgsql \
     mbstring \
     exif \
@@ -30,14 +27,15 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-RUN npm install
-RUN npm run build
+RUN sed -i 's/Listen 80/Listen 10000/' /etc/apache2/ports.conf \
+    && sed -i 's/<VirtualHost \*:80>/<VirtualHost *:10000>/' \
+    /etc/apache2/sites-available/000-default.conf
 
-RUN sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/public#' \
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' \
     /etc/apache2/sites-available/000-default.conf
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-EXPOSE 80
+EXPOSE 10000
 
-CMD ["sh", "-c", "php artisan config:clear && php artisan cache:clear && php artisan migrate --force && apache2-foreground"]
+CMD ["sh", "-c", "php artisan migrate --force && apache2-foreground"]
