@@ -474,7 +474,7 @@
 
 @auth
 
-    @if(auth()->user()->is_admin)
+    @if(auth()->user()->role === 'admin')
     <form action="{{route('donations.destroy',$donation->id)}}"
     method="POST" 
     onsubmit="return confirm('Are you sure you want to delete this food donation?');">
