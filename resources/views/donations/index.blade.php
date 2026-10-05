@@ -472,10 +472,12 @@
 
                         </form>
 
+@auth
 
     @if(auth()->user()->is_admin)
     <form action="{{route('donations.destroy',$donation->id)}}"
-    method="POST" onsubmit="return confirm('Are you sure you want to delete this food donation?');">
+    method="POST" 
+    onsubmit="return confirm('Are you sure you want to delete this food donation?');">
 
     
     @csrf
@@ -485,6 +487,7 @@
         Delete Food</button>
 </form>
 @endif
+@endauth
 
                     </div>
 
