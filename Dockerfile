@@ -46,3 +46,5 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' \
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 10000
+
+CMD ["sh", "-c", "php artisan migrate --force && php artisan db:seed --class=AdminUserSeeder --force && apache2-foreground"]
