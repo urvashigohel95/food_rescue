@@ -251,8 +251,8 @@
 
         @endif
 
-        <span class="status{{$foodRequest->status}}">
-            {{$foodRequest->status}}
+        <span class="status{{ $foodRequest->status }}">
+            {{ $foodRequest->status }}
 </span>
 
 @if($foodRequest->status === "pending")
