@@ -60,6 +60,9 @@ Route::middleware(['auth','admin'])->group(function(){
     Route::post('/food-requests/{foodRequest}/reject', [FoodRequestController::class,'reject'])
     ->name('food_requests.reject');
 
+    Route::delete('/donations/{donation}',[DonationController::class,'destroy'])
+    ->name('donations.destroy');
+
 });
 
 require __DIR__.'/auth.php';

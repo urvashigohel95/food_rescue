@@ -117,6 +117,16 @@ class DonationController extends Controller
             ->route('donations.index')
             ->with('success', 'Food request submitted successfully!');
     }
+
+
+    public function destroy(Donation $donation)
+    {
+        $donation->delete();
+        
+        return redirect()
+        ->route('donations.index')
+        ->with('success','Food donation deleted successfully');
+    }
 }
 
 

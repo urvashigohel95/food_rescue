@@ -199,6 +199,24 @@
             background: #146c43;
         }
 
+
+        .delete-btn{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border:none;
+            border-radius:8px;
+            background:#dc3545;
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+        }
+
+        .delete-btn:hover{
+            background:#bb2d3d;
+        }
+
         .empty {
             text-align: center;
             background: white;
@@ -453,6 +471,20 @@
                             </button>
 
                         </form>
+
+
+    @if(auth()->user()->is_admin)
+    <form action="{{route('donations.destroy',$donation->id}}"
+    method="POST" onsubmit="return confirm('Are you sure you want to delete this food donation?');">
+
+    
+    @csrf
+    @method('DELETE')
+
+    <button type="submit" class="delete-btn">
+        Delete Food</button>
+</form>
+@endif
 
                     </div>
 
